@@ -1,4 +1,5 @@
 import {makeExecutableSchema} from "graphql-tools";
+import Service from "./service/Service.js"
 
 const typeDefs = `
     scalar DateTime,
@@ -69,7 +70,7 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
-        product: () => {},
+        product: (parent,args,context,info)=> Service.getProducts(args,context,info),
         products: () => {}
     },
     Mutation: {

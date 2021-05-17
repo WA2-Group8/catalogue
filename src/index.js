@@ -2,7 +2,7 @@ import express from "express"
 import {graphqlHTTP} from "express-graphql"
 import schema from "./schema.js"
 import mongoose from "mongoose"
-import Service from "./service/Service.js"
+
 
 // import Product from './model/product.js'
 // import Comment from './model/comment.js'
