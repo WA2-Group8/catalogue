@@ -10,7 +10,6 @@ import mongoose from "mongoose"
 const app = express()
 
 app.listen(3000, async () => {
-    console.log("server is running ", 3000);
     await mongoose.connect("mongodb://localhost:27017/catalogue", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -34,6 +33,8 @@ app.listen(3000, async () => {
     // await p1.save()
     // let res = await Product.find().populate("comments")
     // console.log(res)
+
+    console.log("Server is running on port", 3000);
 });
 
 mongoose.connection.on(
