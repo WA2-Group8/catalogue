@@ -70,12 +70,12 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
-        products: (parent,args,context,info) => { Service.getProducts(args,context,info) },
+        products: (parent,args,context,info) => { return Service.getProducts(args,context,info) },
         product: () => {}
     },
     Mutation: {
         productCreate: () => {},
-        commentCreate: (parent, args, context, info) => { Service.createComment(args, context, info) },
+        commentCreate: (parent, args, context, info) => { return Service.createComment(args, context, info) },
     }
 }
 const schema = makeExecutableSchema({typeDefs, resolvers})
