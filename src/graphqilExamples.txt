@@ -1,0 +1,49 @@
+#Mutations - CreateComment
+mutation {
+  commentCreate (
+    commentCreateInput: {
+    	title: "un bel prodotto",
+        stars: 4,
+  	}, 
+    productId: "60a62d07b27f2245ac3e47f9"
+  )
+  {
+    _id,
+    body
+  }
+}
+mutation {
+  commentCreate (
+    commentCreateInput: {
+      title: "bleah",
+      stars: 1,
+      body: "fa schifo"
+  	}, 
+    productId: "60a62d07b27f2245ac3e47f9"
+  )
+  {
+    _id,
+    body
+  }
+}
+
+#Query - GetProducts
+query {
+  products(
+    filter: {
+    },
+    sort: {
+      value: createdAt,
+      order: asc
+    }
+  )
+	{
+    _id,
+    name,
+    createdAt,
+    comments {
+      # Attenzione, per ora comments può contenere solo l'id, se ad esempio si mette title da errore
+      _id,
+    },
+  }
+}

@@ -3,6 +3,13 @@
 import Product from '../model/product.js'
 import Comment from '../model/comment.js'
 
+
+/*
+    (!!!) N.B.: il file graphqilExamples.txt contiene esempi di come utilizzare getProducts e createComment
+    tramite il tool GraphiQL
+ */
+
+
 async function getProducts(args, context, info)
 {
     // N.B.: Lory, siccome il collegamento tra Products e Comments nel DB e di tipo normalized,
