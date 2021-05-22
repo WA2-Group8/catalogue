@@ -22,28 +22,17 @@ async function getProducts(args, context, info)
     //Extract the filterProductInputJSON (it's a JSON) from the request
     const filterProductInputJSON = args["filter"]
 
-    //Extract the sortProductInputJSON (it's a JSON) from the request
-    const sortProductInputJSON = args["sort"]
-
+    const sortJSON = { [args["sort"].value]: args["sort"].order }
     const filterJSON = createFilterJSON(filterProductInputJSON)
-    let products = await Product.find(filterJSON)
 
-    if(filterProductInputJSON.minStars)
+    let products = await Product.find(filterJSON).sort(sortJSON)
+
+    if (filterProductInputJSON.minStars)
         products = products.filter((el)=> el.stars()>= filterProductInputJSON.minStars)
 
-    if(sortProductInputJSON){
-        return products.sort((a,b)=> {
-            if(sortProductInputJSON.order === "asc")
-                return a[sortProductInputJSON.value]-b[sortProductInputJSON.value]
-            else return b[sortProductInputJSON.value]-a[sortProductInputJSON.value]
-        })
-
-    }
-
     return products
-
-
 }
+
 function createFilterJSON(data){
 
     if(data == null)
