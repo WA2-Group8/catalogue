@@ -109,8 +109,9 @@ const createComment = async (args, context, info) =>
         }
     )
 
-    //Save the comment in the proper database collection and then retrieve it to the client
-    return await comment.save()
+    //Retrieve the created comment to the client
+    //return await comment.save()
+    return comment
 }
 
 const Service = { getProducts, createProduct, createComment }
