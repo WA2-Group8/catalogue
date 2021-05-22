@@ -21,7 +21,7 @@ async function getProducts(args, context, info)
 
 const createProduct = async (args, context, info) =>
 {
-    const productJSON = args["productCreatInput"]
+    const productJSON = args["createProductInput"]
 
     const product = new Product({
         name: productJSON.name,
