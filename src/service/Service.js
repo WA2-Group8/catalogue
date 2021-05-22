@@ -2,7 +2,6 @@
 
 import Product from '../model/product.js'
 import Comment from '../model/comment.js'
-import mongoose from "mongoose";
 
 
 /*
@@ -22,31 +21,38 @@ async function getProducts(args, context, info)
     //Extract the filterProductInputJSON (it's a JSON) from the request
     const filterProductInputJSON = args["filter"]
 
-    const sortJSON = { [args["sort"].value]: args["sort"].order }
+    //Creation of a filter parsing the request
     const filterJSON = createFilterJSON(filterProductInputJSON)
+    //Creation of a storing criteria
+    const sortJSON = { [args["sort"].value]: args["sort"].order }
 
-    let products = await Product.find(filterJSON).sort(sortJSON)
+    //Projection JSON for getting last N comments for each product
+    //If client does not provide the param "last", all comments will be retrieved (in this case the projection is an empty JSON object)
+    let lastComments = 1 //Questo parametro andrà preso dalla query grapql fatta dal client
+    const projection = (lastComments > 0) ? {  comments: { '$slice': -lastComments }  } : { }
 
+    let products = await Product.find(filterJSON,   projection  ).sort(sortJSON)
+
+    //Filter products by stars after the query (it's not the best solution)
     if (filterProductInputJSON.minStars)
         products = products.filter((el)=> el.stars()>= filterProductInputJSON.minStars)
-
     return products
 }
 
 function createFilterJSON(data){
 
-    if(data == null)
+    if (data == null)
         return {}
     let query = {};
-    if(data.categories)
+    if (data.categories)
         query.category = data.categories
-    if(data.minPrice)
+    if (data.minPrice)
         query.price = { $gte: data.minPrice }
-    if(data.maxPrice)
+    if (data.maxPrice)
         query.price = { $lte: data.maxPrice }
-    //if(data.minStars)
-    //    query.stars = { $gte: data.minStars }
-    console.log(query)
+    //if (data.minStars)
+       //query.stars = { $gte: data.minStars }
+    //console.log(query)
     return query
 }
 
