@@ -2,6 +2,7 @@
 
 import Product from '../model/product.js'
 import Comment from '../model/comment.js'
+import mongoose from "mongoose";
 
 
 /*
@@ -17,6 +18,47 @@ async function getProducts(args, context, info)
     // Quindi, credo che tu debba anche interrogare il database per ottenere i commenti a partire dall'id prima di restituire
     // i risultati al client.
     // Una alternativa (da valutare) è quella di fare una relazione embedded
+
+    //Extract the filterProductInputJSON (it's a JSON) from the request
+    const filterProductInputJSON = args["filter"]
+
+    //Extract the sortProductInputJSON (it's a JSON) from the request
+    const sortProductInputJSON = args["sort"]
+
+    const filterJSON = createFilterJSON(filterProductInputJSON)
+    let products = await Product.find(filterJSON)
+
+    if(filterProductInputJSON.minStars)
+        products = products.filter((el)=> el.stars()>= filterProductInputJSON.minStars)
+
+    if(sortProductInputJSON){
+        return products.sort((a,b)=> {
+            if(sortProductInputJSON.order === "asc")
+                return a[sortProductInputJSON.value]-b[sortProductInputJSON.value]
+            else return b[sortProductInputJSON.value]-a[sortProductInputJSON.value]
+        })
+
+    }
+
+    return products
+
+
+}
+function createFilterJSON(data){
+
+    if(data == null)
+        return {}
+    let query = {};
+    if(data.categories)
+        query.category = data.categories
+    if(data.minPrice)
+        query.price = { $gte: data.minPrice }
+    if(data.maxPrice)
+        query.price = { $lte: data.maxPrice }
+    //if(data.minStars)
+    //    query.stars = { $gte: data.minStars }
+    console.log(query)
+    return query
 }
 
 const createProduct = async (args, context, info) =>

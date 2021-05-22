@@ -70,7 +70,7 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
-        products: (parent,args,context,info) => { return Service.getProducts(args,context,info) },
+        products: (parent,args,context,info) => {return Service.getProducts(args,context,info) },
         product: () => {}
     },
     Mutation: {
