@@ -74,7 +74,7 @@ const resolvers = {
         product: () => {}
     },
     Mutation: {
-        productCreate: () => {},
+        productCreate: (parent, args, context, info) => { return Service.createProduct(args, context, info) },
         commentCreate: (parent, args, context, info) => { return Service.createComment(args, context, info) },
     }
 }

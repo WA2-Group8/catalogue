@@ -19,6 +19,22 @@ async function getProducts(args, context, info)
     // Una alternativa (da valutare) è quella di fare una relazione embedded
 }
 
+const createProduct = async (args, context, info) =>
+{
+    const productJSON = args["productCreatInput"]
+
+    const product = new Product({
+        name: productJSON.name,
+        createdAt: new Date(),
+        description: productJSON.description,
+        price: productJSON.price,
+        comments: [],
+        category: productJSON.category
+    })
+
+    return await product.save()
+}
+
 const createComment = async (args, context, info) =>
 {
     //Extract the productId from the request
@@ -60,6 +76,6 @@ const createComment = async (args, context, info) =>
     return await comment.save()
 }
 
-const Service = { getProducts, createComment }
+const Service = { getProducts, createProduct, createComment }
 
 export default  Service
