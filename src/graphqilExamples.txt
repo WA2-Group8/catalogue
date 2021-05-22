@@ -47,3 +47,18 @@ query {
     },
   }
 }
+
+# Get Product
+query{
+  product(
+    id: "INSERT HERE THE PRODUCT ID"
+  )
+  {
+    _id,
+    name,
+    createdAt,
+    comments {
+      _id,
+    },
+  }
+}

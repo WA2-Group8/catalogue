@@ -1,5 +1,5 @@
 "use script";
-
+import {to} from 'await-to-js'
 import Product from '../model/product.js'
 import Comment from '../model/comment.js'
 
@@ -114,6 +114,15 @@ const createComment = async (args, context, info) =>
     return comment
 }
 
-const Service = { getProducts, createProduct, createComment }
+const getProductById = async function(args) {
+    const id = args["id"]
 
-export default  Service
+    let [err, product] = await to(Product.findById(id))
+    if(err) throw(err)
+
+    return product
+}
+
+const Service = { getProducts, getProductById, createProduct, createComment }
+
+export default Service
