@@ -78,6 +78,11 @@ const resolvers = {
     Mutation: {
         productCreate: (parent, args, context, info) => { return Service.createProduct(args, context, info) },
         commentCreate: (parent, args, context, info) => { return Service.createComment(args, context, info) },
+    },
+    Product:{
+        comments: (parent, args, context, info) =>{
+            return Service.getComments(parent,args,context,info)
+        }
     }
 }
 const schema = makeExecutableSchema({typeDefs, resolvers})

@@ -1,5 +1,4 @@
 import mongoose from "mongoose"
-import Comment from "./comment.js"
 
 const Schema = mongoose.Schema;
 const ProductSchema = new Schema(
@@ -23,27 +22,7 @@ const ProductSchema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: "comment"
             }
-            /*{
-                title: {
-                    type: String,
-                    required: true
-                },
-                body: String,
-                stars: {
-                    type: Number,
-                    required: true,
-                    validate: {
-                        validator: Number.isInteger,
-                        message: "{VALUE} is not an integer value"
-                    }
-                },
-                date: {
-                    type: Date,
-                    required: true,
-                    default: Date.now
-                }
-            }
-            */
+
         ],
         category: {
             type: String,
