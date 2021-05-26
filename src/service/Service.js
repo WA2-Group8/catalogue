@@ -31,7 +31,7 @@ async function getProducts(args, context, info)
     let lastComments = 1 //Questo parametro andrà preso dalla query grapql fatta dal client
     const projection = (lastComments > 0) ? {  comments: { '$slice': -lastComments }  } : { }
 
-    let products = await Product.find(filterJSON,   projection  ).sort(sortJSON)
+    let products = await Product.find(filterJSON, projection).sort(sortJSON).populate("comments")
 
     //Filter products by stars after the query (it's not the best solution)
     if (filterProductInputJSON.minStars)
@@ -56,6 +56,16 @@ function createFilterJSON(data){
        //query.stars = { $gte: data.minStars }
     //console.log(query)
     return query
+}
+
+const getProductById = async function(args)
+{
+    const id = args["id"]
+
+    const [err, product] = await to(Product.findById(id).populate("comments"))
+    if (err) throw(err)
+
+    return product
 }
 
 const createProduct = async (args, context, info) =>
@@ -111,18 +121,8 @@ const createComment = async (args, context, info) =>
         }
     )
 
-    //Retrieve the created comment to the client
-    //return await comment.save()
-    return comment
-}
-
-const getProductById = async function(args) {
-    const id = args["id"]
-
-    let [err, product] = await to(Product.findById(id))
-    if(err) throw(err)
-
-    return product
+    //Save the created comment in the database and retrieve it to the client
+    return await comment.save()
 }
 
 const Service = { getProducts, getProductById, createProduct, createComment }

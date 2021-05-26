@@ -18,9 +18,12 @@ const ProductSchema = new Schema(
             required: true
         },
         comments: [
-            //type: Schema.Types.ObjectId,
-            //ref: "comment"
             {
+                //Comments are normalized inside Product
+                type: Schema.Types.ObjectId,
+                ref: "comment"
+            }
+            /*{
                 title: {
                     type: String,
                     required: true
@@ -40,6 +43,7 @@ const ProductSchema = new Schema(
                     default: Date.now
                 }
             }
+            */
         ],
         category: {
             type: String,
