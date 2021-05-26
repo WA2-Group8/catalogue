@@ -1,32 +1,4 @@
-#Mutations - CreateComment
-mutation {
-  commentCreate (
-    commentCreateInput: {
-    	title: "un bel prodotto",
-        stars: 4,
-  	}, 
-    productId: "60a62d07b27f2245ac3e47f9"
-  )
-  {
-    _id,
-    body
-  }
-}
-mutation {
-  commentCreate (
-    commentCreateInput: {
-      title: "bleah",
-      stars: 1,
-      body: "fa schifo"
-  	}, 
-    productId: "60a62d07b27f2245ac3e47f9"
-  )
-  {
-    _id,
-    body
-  }
-}
-
+# Query - products
 query {
   products(
     filter: {
@@ -42,7 +14,7 @@ query {
     _id,
     stars,
     name,
-    comments(last: 3) {
+    comments(last: 2) {
       _id,
       title,
       body,
@@ -51,7 +23,7 @@ query {
   }
 }
 
-# Get Product
+# Query - product
 query{
   product(
     id: "INSERT HERE THE PRODUCT ID"
@@ -63,5 +35,51 @@ query{
     comments {
       _id,
     },
+  }
+}
+
+# Mutation - CreateProduct
+mutation {
+  productCreate (
+    productCreateInput: {
+      name: "ProdottoNuovo",
+      price: 1000.0,
+      category: TECH
+    }
+  )
+  {
+    _id,
+    name,
+    description,
+    price
+  }
+}
+
+# Mutation - CreateComment
+mutation {
+  commentCreate (
+    commentCreateInput: {
+    	title: "un bel prodotto",
+        stars: 4,
+  	},
+    productId: "60a62d07b27f2245ac3e47f9"
+  )
+  {
+    _id,
+    body
+  }
+}
+mutation {
+  commentCreate (
+    commentCreateInput: {
+      title: "bleah",
+      stars: 1,
+      body: "fa schifo"
+  	},
+    productId: "60a62d07b27f2245ac3e47f9"
+  )
+  {
+    _id,
+    body
   }
 }

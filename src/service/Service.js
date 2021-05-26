@@ -5,14 +5,12 @@ import Comment from '../model/comment.js'
 
 
 /*
-    (!!!) N.B.: il file graphqilExamples.txt contiene esempi di come utilizzare getProducts e createComment
-    tramite il tool GraphiQL
+    N.B.: il file graphqilExamples.txt contiene esempi di utilizzo su http://localhost:3000/graphql
  */
 
 
 async function getProducts(args, context, info)
 {
-
     //Extract the filterProductInputJSON (it's a JSON) from the request
     const filterProductInputJSON = args["filter"]
 
@@ -20,20 +18,20 @@ async function getProducts(args, context, info)
     const filterJSON = createFilterJSON(filterProductInputJSON)
     //Creation of a storing criteria
     let sortJSON = {}
-    if(args["sort"])
+    if (args["sort"])
         sortJSON = { [args["sort"].value]: args["sort"].order }
-
 
     let products = await Product.find(filterJSON).sort(sortJSON).populate("comments")
 
-    //Filter products by stars after the query (it's not the best solution)
+    //Filter products by stars after the query
     if (filterProductInputJSON.minStars)
-        products = products.filter((el)=> el.stars()>= filterProductInputJSON.minStars)
+        products = products.filter((el)=> el.stars() >= filterProductInputJSON.minStars)
+
     return products
 }
 
-function createFilterJSON(data){
-
+function createFilterJSON(data)
+{
     if (data == null)
         return {}
     let query = {}
@@ -61,7 +59,6 @@ const getProductById = async function(args)
 const createProduct = async (args, context, info) =>
 {
     const productJSON = args["productCreateInput"]
-    console.log(productJSON)
 
     const product = new Product({
         name: productJSON.name,
@@ -118,12 +115,9 @@ const createComment = async (args, context, info) =>
 
 const getComments = async (parent, args, context, info) =>
 {
-
     let product = await Product.findById(parent.id,{  comments: { '$slice': -args.last }}).populate("comments")
-
     return product.comments
 }
-
 
 const Service = { getProducts, getProductById, createProduct, createComment, getComments }
 

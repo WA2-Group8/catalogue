@@ -14,6 +14,7 @@ const ProductSchema = new Schema(
         description: String,
         price: {
             type: Number,
+            min: [0, 'Price must not be lower than 0'],
             required: true
         },
         comments: [
@@ -33,7 +34,7 @@ const ProductSchema = new Schema(
 );
 
 ProductSchema.methods.stars = function () {
-    if(this.comments.length === 0)
+    if (this.comments.length === 0)
         return 0
     let sum = this.comments.map(c => c.stars).reduce( (s1, s2) => s1+s2 , 0 );
     return sum/this.comments.length
