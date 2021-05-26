@@ -27,24 +27,27 @@ mutation {
   }
 }
 
-#Query - GetProducts
 query {
   products(
     filter: {
+      minPrice: 27,
+      maxPrice: 50
     },
     sort: {
-      value: createdAt,
-      order: asc
+      value: price,
+      order: desc
     }
   )
 	{
     _id,
+    stars,
     name,
-    createdAt,
-    comments {
-      # Attenzione, per ora comments può contenere solo l'id, se ad esempio si mette title da errore
+    comments(last: 3) {
       _id,
+      title,
+      body,
     },
+    price
   }
 }
 

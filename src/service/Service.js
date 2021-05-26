@@ -43,13 +43,15 @@ function createFilterJSON(data){
 
     if (data == null)
         return {}
-    let query = {};
+    let query = {}
     if (data.categories)
         query.category = data.categories
-    if (data.minPrice)
-        query.price = { $gte: data.minPrice }
-    if (data.maxPrice)
-        query.price = { $lte: data.maxPrice }
+    const minPrice = (data.minPrice) ? data.minPrice : 0
+    const maxPrice = (data.maxPrice) ? data.maxPrice : Number.MAX_VALUE
+    if (minPrice > maxPrice)
+        throw "minPrice is greater than maxPrice"
+    query.price = { $gte: minPrice, $lte: maxPrice }
+
     //if (data.minStars)
        //query.stars = { $gte: data.minStars }
     //console.log(query)
