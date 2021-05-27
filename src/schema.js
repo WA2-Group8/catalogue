@@ -70,19 +70,15 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
-        products: (parent, args, context, info) => {
-            return Service.getProducts(args, context, info)
-        },
-        product: (parents, args, context, info) => Service.getProductById(args)
+        products: (parent, args, context, info) => { return Service.getProducts(args, context, info) },
+        product: (parents, args, context, info) => { return Service.getProductById(args) }
     },
     Mutation: {
         productCreate: (parent, args, context, info) => { return Service.createProduct(args, context, info) },
         commentCreate: (parent, args, context, info) => { return Service.createComment(args, context, info) },
     },
     Product:{
-        comments: (parent, args, context, info) =>{
-            return Service.getComments(parent,args,context,info)
-        }
+        comments: (parent, args, context, info) =>{ return Service.getComments(parent,args,context,info) }
     }
 }
 const schema = makeExecutableSchema({typeDefs, resolvers})

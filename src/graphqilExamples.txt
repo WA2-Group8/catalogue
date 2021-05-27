@@ -42,7 +42,7 @@ query{
 mutation {
   productCreate (
     productCreateInput: {
-      name: "ProdottoNuovo",
+      name: "NewProduct",
       price: 1000.0,
       category: TECH
     }
@@ -59,7 +59,7 @@ mutation {
 mutation {
   commentCreate (
     commentCreateInput: {
-    	title: "un bel prodotto",
+    	title: "a nice product",
         stars: 4,
   	},
     productId: "60a62d07b27f2245ac3e47f9"
@@ -72,9 +72,9 @@ mutation {
 mutation {
   commentCreate (
     commentCreateInput: {
-      title: "bleah",
+      title: "Yuck",
       stars: 1,
-      body: "fa schifo"
+      body: "So horrible"
   	},
     productId: "60a62d07b27f2245ac3e47f9"
   )

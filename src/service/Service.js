@@ -4,12 +4,10 @@ import Product from '../model/product.js'
 import Comment from '../model/comment.js'
 
 
-/*
-    N.B.: il file graphqilExamples.txt contiene esempi di utilizzo su http://localhost:3000/graphql
- */
+//N.B. The graphiqlExamples.txt file contains some examples on how to use it (visit http://localhost:3000/graphql)
 
 
-async function getProducts(args, context, info)
+const getProducts = async function (args, context, info)
 {
     //Extract the filterProductInputJSON (it's a JSON) from the request
     const filterProductInputJSON = args["filter"]
@@ -21,16 +19,11 @@ async function getProducts(args, context, info)
     if (args["sort"])
         sortJSON = { [args["sort"].value]: args["sort"].order }
 
-    let products = await Product.find(filterJSON).sort(sortJSON).populate("comments")
-
-    //Filter products by stars after the query
-    if (filterProductInputJSON.minStars)
-        products = products.filter((el)=> el.stars() >= filterProductInputJSON.minStars)
-
-    return products
+    const products = await Product.find(filterJSON).sort(sortJSON)
+    return products.populate("comments")
 }
 
-function createFilterJSON(data)
+const createFilterJSON = function(data)
 {
     if (data == null)
         return {}
@@ -42,7 +35,8 @@ function createFilterJSON(data)
     if (minPrice > maxPrice)
         throw "minPrice is greater than maxPrice"
     query.price = { $gte: minPrice, $lte: maxPrice }
-
+    if(data.minStars)
+        query.stars = { $gte: data.minStars }
     return query
 }
 
@@ -66,7 +60,8 @@ const createProduct = async (args, context, info) =>
         description: productJSON.description,
         price: productJSON.price,
         comments: [],
-        category: productJSON.category
+        category: productJSON.category,
+        stars: 0
     })
 
     return await product.save()
@@ -99,11 +94,16 @@ const createComment = async (args, context, info) =>
         date: new Date()
     })
 
+    //Compute the new product stars value
+    const commentLength = product.comments.length
+    const stars = ((commentLength * product.stars + comment.stars) / (commentLength + 1)).toFixed(1)
+
     //Add the new comment in the list of comments belonging to the product and then update the database
     product["comments"].push(comment)
     await Product.updateOne(
         { _id: productId },
-        { comments: product["comments"] },
+        { comments: product["comments"] ,
+                 stars: stars},
         (err) => {
             if (err) throw err;
         }

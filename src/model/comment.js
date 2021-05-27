@@ -11,6 +11,8 @@ const CommentSchema = new Schema(
         stars: {
             type: Number,
             required: true,
+            min: [0],
+            max: [5],
             validate: {
                 validator: Number.isInteger,
                 message: "{VALUE} is not an integer value"
